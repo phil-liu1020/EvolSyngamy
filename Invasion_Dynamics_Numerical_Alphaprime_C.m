@@ -1,11 +1,11 @@
-function alpha0 =Invasion_Dynamics_Numerical_Alphaprime_C(beta,C,alpha0,A,M,tf,fmut0,theta1,deltaalpha,m,plots)
+function alphares0 =Invasion_Dynamics_Numerical_Alphaprime_C(beta,C,alphares0,A,M,tf,f0mut,theta1,deltaalpha,m,plots)
 
 % This function iterates the invasion dynamics until fixation of the invading gamete with different encounter rate is reached. In our model, we consider fixation to be reached at the time when the change in frequency of the invader from one generation to the next is less than theta1.
 % List of parameters: deltaalpha - difference between mutant encounter rate and resident encounter rate.
 %                     theta1 - change in frequency between a generation for the system to be deemed for fixation. This is usually a small parameter.
 %                     tf - fertilisation period
-%                     alpha0 - resident gamete encounter rate
-%                     fmut0 - initial frequency of mutant
+%                     alphares0 - resident gamete encounter rate
+%                     f0mut - initial frequency of mutant
 %                     M - mass of adult
 %                     A - number of adults at start of each generation
 %                     beta - resistance to survival of a gamete/agamete
@@ -31,7 +31,7 @@ function alpha0 =Invasion_Dynamics_Numerical_Alphaprime_C(beta,C,alpha0,A,M,tf,f
 
 
 
-if alpha0-deltaalpha<=0                                                     
+if alphares0-deltaalpha<=0                                                     
 else
 deltaalpha=deltaalpha*sign(randn);                                         
 end
@@ -41,20 +41,20 @@ i=0;
 
 while deltafmut>theta1
 
-   Nres0=(A*M*(1-fmut0))/m;                                                    
-   Nmut0=(A*M*fmut0)/m;                                                        
+   Nres0=(A*M*(1-f0mut))/m;                                                    
+   Nmut0=(A*M*f0mut)/m;                                                        
 
-   [t,x] = ode45(@(t,x)unisexual_alphaprime_ODE(t,x,deltaalpha,alpha0),[0,tf],[Nres0,Nmut0,0,0,0]);  
+   [t,x] = ode45(@(t,x)unisexual_alphaprime_ODE(t,x,deltaalpha,alphares0),[0,tf],[Nres0,Nmut0,0,0,0]);  
 
    ws=(Nmut0-x(length(x(:,1)),2))*exp(-beta/(2*m))*(1-C)+x(length(x(:,1)),2)*exp(-beta/m);    
 
    wa=(Nres0-x(length(x(:,1)),1))*exp(-beta/(2*m))*(1-C)+x(length(x(:,1)),1)*exp(-beta/m);
 
-  mut=ws/(ws+wa);
-   deltafmut=abs(fmut-fmut0);                                          
+   fmut=ws/(ws+wa);
+   deltafmut=abs(fmut-f0mut);                                          
    
   
-   fmut0=fmut;
+   f0mut=fmut;
    i = i + 1;
 
    if length(g)>10000
@@ -63,9 +63,9 @@ while deltafmut>theta1
    end
 
    if i<=length(g)
-   g(i)=fmut0;
+   g(i)=f0mut;
    else
-   g(end+1) = fmut0; 
+   g(end+1) = f0mut; 
    end
    
 end
@@ -81,7 +81,7 @@ else
 end
 
 if fmut>0.5
-    alpha0 = alpha0+deltaalpha;
+    alphares0 = alphares0+deltaalpha;
 else
 end
 
