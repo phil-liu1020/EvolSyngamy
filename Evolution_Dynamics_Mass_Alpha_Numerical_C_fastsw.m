@@ -1,16 +1,20 @@
 function Evolution_Dynamics_Mass_Alpha_Numerical_C_fastsw(betaB,betaG,C,tsG,tsB,alpha0,A,M,tf,f0mut,fs0,theta1m,theta1a,deltam,deltaalpha,mres0,theta2,theta3)
 
-% This function numerically plots the phase trajectory for m against
-% \alpha, where m is the optimal size and \alpha the encounter rate that a
-% gamete can evolve to, subject to environmental switching every fixed number of generations in each state. tsG is the # generations in the good state. tsB the # generations in the bad state.
+% This function numerically plots the phase trajectory for m against \alpha, where m is the optimal size and \alpha the encounter rate that a
+% gamete can evolve to, subject to environmental switching every fixed number of generations in each state. 
+% tsG is the number of generations spent in the good state and tsB the number of generations in the bad state.
 
-% tf is the fertilisation period
-% theta3 is the small parameter for the change in mass for fixation.
-% f0mut is the initial frequnecy of gamete with mass m+\deltam, fs0 is the initial frequency of gamete with eocnunter rate \alpha'=\alpha+\delta\alpha.
-% fs0 is the initial frequency of gamete with encounter rate \alpha'=\alpha+\delta\alpha.
-% theta1m is the theta1 for the gamete with mass m+\deltam, theta1a is the theta1 for the gamete with encounter rate alpha'
-% mres0 is the initial mass of gamete
-% If the trajectory changes by as small as theta3 in theta2 evolutionary time units \tau, then we assume the trajectrory has equilibrated.
+% List of parameters:
+%                   tf - fertilisation period
+%                   theta3 - small parameter for the change in mass for fixation.
+%                   f0mut - initial frequnecy of gamete with mass m+\deltam, fs0 is the initial frequency of gamete with eocnunter rate \alpha'=\alpha+\delta\alpha.
+%                   fs0 - initial frequency of gamete with encounter rate \alpha'=\alpha+\delta\alpha.
+%                   theta1m is the theta1 for the gamete with mass m+\deltam and theta1a is the theta1 for the gamete with encounter rate alpha'
+%                   mres0 is the initial mass of gamete
+%                   If the trajectory changes by as small as theta3 in theta2 evolutionary time units \tau, then we assume the trajectrory has equilibrated.
+%                   betaB and betaG are the resistance to survival in the bad and good environments respectiely.
+%                   deltaalpha and deltam - mutational stepsize in \alpha and m respectively.
+
 
 g=[];  
 h=[]; 
