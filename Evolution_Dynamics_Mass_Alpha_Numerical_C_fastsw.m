@@ -14,7 +14,17 @@ function Evolution_Dynamics_Mass_Alpha_Numerical_C_fastsw(betaB,betaG,C,tsG,tsB,
 %                   If the trajectory changes by as small as theta3 in theta2 evolutionary time units \tau, then we assume the trajectrory has equilibrated.
 %                   betaB and betaG are the resistance to survival in the bad and good environments respectiely.
 %                   deltaalpha and deltam - mutational stepsize in \alpha and m respectively.
-
+%
+% Inside the while loop:
+%                     mres and alphares - mass and encounter rate of resident
+%                     B and G are binary variables representing the bad and good states respectively.
+%                     g is the vector of mass, h the vector of encounter rate.
+%                     If deltamres+deltaalphares changes by less than theta3 in theta2 invasion generations, then the
+%                     system is deemed to have equilibrated.
+%                     if sign(randn)=1, mutation occurs in the mass, else the muitation occurs in the encounter rate.
+% Things to note:
+% By default, we start in the good state.
+% Mutations in mass and encounter rate do not occur simultaneously.
 
 g=[];  
 h=[]; 
@@ -22,11 +32,11 @@ deltamres=1;
 deltaalphares=1;
 
 if tsG==0
-G=0; B=1;                        % If no time is spent in the good state, then the system starts in the bad state
+G=0; B=1;                       
 elseif tsB==0
 G=1; B=0;
 else
-G=1; B=0;                         % by default, we start in the good state.
+G=1; B=0;                        
 end
 
 NINVGENS=0;
@@ -37,7 +47,7 @@ while abs(deltamres+deltaalphares)>theta3
 tic
 
   
-      if sign(randn)==1         % if sign(randn)=1, mutation occurs in the mass
+      if sign(randn)==1         
       mres=Invasion_Dynamics_Mass_Numerical_C_FastSwitchingEnv(betaB,betaG,tsG,tsB,C,alpha0,A,M,tf,f0mut,theta1m,deltam,mres0,0,B,G,0);  % Mutation in mass occurs, and if mutant invades, mres is the mutant mass, if mutant doesn't invade, mres is the resident mass.
       alphares=alpha0;  
    
@@ -59,7 +69,7 @@ tic
       h(end+1)=alpha0;
       g(end+1)=mres0;
       end
-                                                                                                       % Mutations in mass and encounter rate do not occur simultaneously .
+                                                                                                       
   NINVGENS=NINVGENS+1;
 
   if mod(NINVGENS,theta2)==0                   % Checks whether the system has quasi equilibrated after theta2 invasions.
